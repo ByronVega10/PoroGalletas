@@ -18,12 +18,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.porogalletas.viewmodel.UsuarioViewModel
 
 @Composable
 fun MainScaffold(
     parentNavController: NavHostController,
-    usuarioViewModel: UsuarioViewModel
+    usuarioViewModel: `UsuarioViewModel.kt`
 ) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()

@@ -21,12 +21,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.porogalletas.viewmodel.UsuarioViewModel
 
 @Composable
 fun LoginScreen(
     navController: NavController,
-    viewModel: UsuarioViewModel,
+    viewModel: `UsuarioViewModel.kt`,
 ){
     val estado by viewModel.estado.collectAsState()
 
