@@ -18,11 +18,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.porogalletas.viewmodel.PlatilloViewModel
+import com.example.porogalletas.viewmodel.UsuarioViewModel
 
 @Composable
 fun MainScaffold(
     parentNavController: NavHostController,
-    usuarioViewModel: `UsuarioViewModel.kt`
+    usuarioViewModel: UsuarioViewModel,
+    platilloViewModel: PlatilloViewModel
 ) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -33,7 +36,7 @@ fun MainScaffold(
             FloatingActionButton(
                 onClick = { navController.navigate("Add") },
                 containerColor = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(72.dp) // 👈 más grande y destacado
+                modifier = Modifier.size(72.dp)
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(
@@ -56,7 +59,7 @@ fun MainScaffold(
                 tonalElevation = 6.dp,
                 modifier = Modifier.height(70.dp),
                 actions = {
-                    // HOME (izquierda)
+                    // HOME
                     IconButton(
                         onClick = { navController.navigate("homeScreen") },
                         modifier = Modifier.weight(1f)
@@ -65,20 +68,23 @@ fun MainScaffold(
                             Icon(
                                 imageVector = Icons.Default.Home,
                                 contentDescription = "Home",
-                                tint = if (currentRoute == "homeScreen") MaterialTheme.colorScheme.primary else Color.Gray
+                                tint = if (currentRoute == "homeScreen")
+                                    MaterialTheme.colorScheme.primary
+                                else Color.Gray
                             )
                             Text(
                                 text = "Home",
                                 fontSize = 12.sp,
-                                color = if (currentRoute == "homeScreen") MaterialTheme.colorScheme.primary else Color.Gray
+                                color = if (currentRoute == "homeScreen")
+                                    MaterialTheme.colorScheme.primary
+                                else Color.Gray
                             )
                         }
                     }
 
-                    // Espacio para el FAB
                     Spacer(modifier = Modifier.weight(1f))
 
-                    // PROFILE (derecha)
+                    // EDIT
                     IconButton(
                         onClick = { navController.navigate("Edit") },
                         modifier = Modifier.weight(1f)
@@ -87,12 +93,16 @@ fun MainScaffold(
                             Icon(
                                 imageVector = Icons.Default.Edit,
                                 contentDescription = "Editar",
-                                tint = if (currentRoute == "Edit") MaterialTheme.colorScheme.primary else Color.Gray
+                                tint = if (currentRoute == "Edit")
+                                    MaterialTheme.colorScheme.primary
+                                else Color.Gray
                             )
                             Text(
                                 text = "Editar",
                                 fontSize = 12.sp,
-                                color = if (currentRoute == "Edit") MaterialTheme.colorScheme.primary else Color.Gray
+                                color = if (currentRoute == "Edit")
+                                    MaterialTheme.colorScheme.primary
+                                else Color.Gray
                             )
                         }
                     }
@@ -105,7 +115,7 @@ fun MainScaffold(
                 navController = navController,
                 startDestination = "homeScreen"
             ) {
-               composable("HomeScreen") { HomeScreen(parentNavController, usuarioViewModel) }
+               composable("HomeScreen") { HomeScreen(parentNavController, usuarioViewModel, platilloViewModel) }
                composable("Edit") { EditScreen() }
                composable("Add") { AddScreen() }
             }
