@@ -80,16 +80,6 @@ fun RegisterScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        // Checkbox: aceptar términos
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Checkbox(
-                checked = estado.aceptaTerminos,
-                onCheckedChange = viewModel::onAceptarTerminosChange
-            )
-            Spacer(Modifier.width(width = 8.dp))
-            Text(text = "Acepto los términos y condiciones")
-        }
-
         // Botón: enviar
         Button(
             onClick = {

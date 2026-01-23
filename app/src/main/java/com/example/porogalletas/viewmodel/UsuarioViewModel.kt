@@ -27,11 +27,6 @@ class UsuarioViewModel: ViewModel() {
         _estado.update { it.copy(clave = valor, errores = it.errores.copy(clave = null)) }
     }
 
-    // Actualiza checkbox de aceptación
-    fun onAceptarTerminosChange(valor: Boolean) {
-        _estado.update { it.copy(aceptaTerminos = valor) }
-    }
-
     fun validarFormulario(): Boolean {
         val estadoActual = _estado.value
         val errores = UsuarioErrores(
