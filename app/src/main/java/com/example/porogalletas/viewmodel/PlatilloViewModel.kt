@@ -1,28 +1,49 @@
 package com.example.porogalletas.viewmodel
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
+import com.example.porogalletas.R
 import com.example.porogalletas.model.Platillo
 
 class PlatilloViewModel : ViewModel() {
 
-    private val platillos = mutableListOf<Platillo>()
+    private val _platillos = mutableStateListOf<Platillo>()
+    val platillos: List<Platillo> = _platillos
 
+    init {
+        // Datos de ejemplo (simulan datos del sistema)
+        _platillos.addAll(
+            listOf(
+                Platillo(
+                    id = 1,
+                    nombre = "Poro Galleta Clásica",
+                    ingredientes = mutableListOf("Avena", "Miel", "Chocolate"),
+                    precio = 2500,
+                    imageResId = R.drawable.plato1
+                ),
+                Platillo(
+                    id = 2,
+                    nombre = "Poro Galleta Vegana",
+                    ingredientes = mutableListOf("Almendra", "Cacao", "Dátiles"),
+                    precio = 2800,
+                    imageResId = R.drawable.plato2
+                )
+            )
+        )
+    }
     fun agregarPlatillo(platillo: Platillo) {
-        platillos.add(platillo)
+        _platillos.add(platillo)
     }
 
-    fun obtenerPlatillos(): List<Platillo> {
-        return platillos
-    }
 
     fun eliminarPlatillo(id: Int) {
-        platillos.removeIf { it.id == id }
+        _platillos.removeIf { it.id == id }
     }
 
     fun editarPlatillo(platilloEditado: Platillo) {
-        val index = platillos.indexOfFirst { it.id == platilloEditado.id }
+        val index = _platillos.indexOfFirst { it.id == platilloEditado.id }
         if (index != -1) {
-            platillos[index] = platilloEditado
+            _platillos[index] = platilloEditado
         }
     }
 }
