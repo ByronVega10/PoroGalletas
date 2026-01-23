@@ -34,7 +34,7 @@ fun MainScaffold(
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { navController.navigate("Add") },
+                onClick = { navController.navigate("add") },
                 containerColor = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(72.dp)
             ) {
@@ -61,14 +61,14 @@ fun MainScaffold(
                 actions = {
                     // HOME
                     IconButton(
-                        onClick = { navController.navigate("homeScreen") },
+                        onClick = { navController.navigate("home") },
                         modifier = Modifier.weight(1f)
                     ) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Icon(
                                 imageVector = Icons.Default.Home,
                                 contentDescription = "Home",
-                                tint = if (currentRoute == "homeScreen")
+                                tint = if (currentRoute == "home")
                                     MaterialTheme.colorScheme.primary
                                 else Color.Gray
                             )
@@ -86,14 +86,14 @@ fun MainScaffold(
 
                     // EDIT
                     IconButton(
-                        onClick = { navController.navigate("Edit") },
+                        onClick = { navController.navigate("edit") },
                         modifier = Modifier.weight(1f)
                     ) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Icon(
                                 imageVector = Icons.Default.Edit,
                                 contentDescription = "Editar",
-                                tint = if (currentRoute == "Edit")
+                                tint = if (currentRoute == "edit")
                                     MaterialTheme.colorScheme.primary
                                 else Color.Gray
                             )
@@ -113,11 +113,11 @@ fun MainScaffold(
         Box(modifier = Modifier.padding(innerPadding)) {
             NavHost(
                 navController = navController,
-                startDestination = "homeScreen"
+                startDestination = "home"
             ) {
-               composable("HomeScreen") { HomeScreen(parentNavController, usuarioViewModel, platilloViewModel) }
-               composable("Edit") { EditScreen() }
-               composable("Add") { AddScreen() }
+                composable("home") { HomeScreen(parentNavController, usuarioViewModel, platilloViewModel) }
+                composable("edit") { EditScreen() }
+                composable("add") { AddScreen() }
             }
         }
     }

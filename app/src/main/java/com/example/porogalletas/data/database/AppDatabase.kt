@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 
 @Database(
     entities = [UsuarioEntity::class, PlatilloEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -33,8 +33,9 @@ abstract class AppDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
-                    "porogalletas_db"
+                    "porogalletas_db_v2"
                 )
+                    .fallbackToDestructiveMigration() // 👈 ESTA LÍNEA
                     .addCallback(DatabaseCallback(context))
                     .build()
                 INSTANCE = instance
@@ -58,7 +59,7 @@ abstract class AppDatabase : RoomDatabase() {
                     UsuarioEntity(
                         nombre = "Admin",
                         correo = "admin@poro.cl",
-                        clave = "1234"
+                        clave = "123456"
                     )
                 )
 
@@ -66,12 +67,12 @@ abstract class AppDatabase : RoomDatabase() {
                     UsuarioEntity(
                         nombre = "Usuario",
                         correo = "user@poro.cl",
-                        clave = "abcd"
+                        clave = "abcdef"
                     )
                 )
 
                 // 🍽️ Platillos de prueba
-               database.platilloDao().insertarPlatillos(
+                database.platilloDao().insertarPlatillos(
                     listOf(
                         PlatilloEntity(
                             nombre = "Poro Clásico",
