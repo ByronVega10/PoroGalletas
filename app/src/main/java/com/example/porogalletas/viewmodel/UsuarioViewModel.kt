@@ -1,13 +1,20 @@
 package com.example.porogalletas.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.porogalletas.data.datastore.SessionManager
+import com.example.porogalletas.data.usuario.UsuarioRepository
 import com.example.porogalletas.model.UsuarioErrores
 import com.example.porogalletas.model.Usuario
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class UsuarioViewModel: ViewModel() {
+class UsuarioViewModel (
+    private val repository: UsuarioRepository,
+    private val sessionManager: SessionManager
+): ViewModel() {
 
     private val _estado = MutableStateFlow(value = Usuario())
     val estado: StateFlow<Usuario> = _estado
@@ -44,5 +51,36 @@ class UsuarioViewModel: ViewModel() {
         _estado.update { it.copy(errores = errores) }
 
         return !hayErrores
+    }
+
+    fun login(onSuccess: () -> Unit) {
+        if (!validarFormulario()) return
+
+        viewModelScope.launch {
+            val usuario = repository.login(
+                correo = estado.value.correo,
+                clave = estado.value.clave
+            )
+
+            if (usuario == null) {
+                _estado.update {
+                    it.copy(
+                        errores = it.errores.copy(
+                            general = "Correo o contraseña incorrectos"
+                        )
+                    )
+                }
+            } else {
+                sessionManager.saveSession(usuario.correo)
+                onSuccess()
+            }
+        }
+    }
+
+    fun logout(onLogout: () -> Unit) {
+        viewModelScope.launch {
+            sessionManager.clearSession()
+            onLogout()
+        }
     }
 }

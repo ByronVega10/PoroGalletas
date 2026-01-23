@@ -2,21 +2,16 @@ package com.example.porogalletas.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
@@ -26,9 +21,10 @@ import com.example.porogalletas.viewmodel.UsuarioViewModel
 @Composable
 fun RegisterScreen(
     navController: NavController,
-    viewModel: UsuarioViewModel,
+    usuarioViewModel: UsuarioViewModel,
 ){
-    val estado by viewModel.estado.collectAsState()
+    val estado by usuarioViewModel.estado.collectAsState()
+
 
     Column(
         Modifier
@@ -40,7 +36,7 @@ fun RegisterScreen(
         // Campo nombre
         OutlinedTextField(
             value = estado.nombre,
-            onValueChange = viewModel::onNombreChange,
+            onValueChange = usuarioViewModel::onNombreChange,
             label = { Text(text = "Nombre") },
             isError = estado.errores.nombre != null,
             supportingText = {
@@ -54,12 +50,12 @@ fun RegisterScreen(
         // Campo correo
         OutlinedTextField(
             value = estado.correo,
-            onValueChange = viewModel::onCorreoChange,
-            label = { Text(text = "Correo electrónico") },
+            onValueChange = usuarioViewModel::onCorreoChange,
+            label = { Text("Correo") },
             isError = estado.errores.correo != null,
             supportingText = {
                 estado.errores.correo?.let {
-                    Text(text = it, color = MaterialTheme.colorScheme.error)
+                    Text(it, color = MaterialTheme.colorScheme.error)
                 }
             },
             modifier = Modifier.fillMaxWidth()
@@ -68,7 +64,7 @@ fun RegisterScreen(
         // Campo clave
         OutlinedTextField(
             value = estado.clave,
-            onValueChange = viewModel::onClaveChange,
+            onValueChange = usuarioViewModel::onClaveChange,
             label = { Text(text = "Contraseña") },
             visualTransformation = PasswordVisualTransformation(),
             isError = estado.errores.clave != null,
@@ -80,18 +76,23 @@ fun RegisterScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
+        estado.errores.general?.let {
+            Text(
+                text = it,
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+        }
+
         // Botón: enviar
-        Button(
-            onClick = {
-                if (viewModel.validarFormulario()) {
-                    navController.navigate("home"){
-                        popUpTo("registro") { inclusive=true }
-                    }
+        Button(onClick = {
+            usuarioViewModel.login {
+                navController.navigate("Home") {
+                    popUpTo("Login") { inclusive = true }
                 }
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(text = "Registrar")
+            }
+        }) {
+            Text("Ingresar")
         }
     }
 }
