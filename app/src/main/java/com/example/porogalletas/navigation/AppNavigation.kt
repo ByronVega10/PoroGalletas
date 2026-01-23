@@ -6,22 +6,29 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.porogalletas.ui.screen.MainScaffold
-import com.example.porogalletas.ui.screen.LoginScreen
+import com.example.porogalletas.ui.screen.RegisterScreen
+import com.example.porogalletas.viewmodel.PlatilloViewModel
+import com.example.porogalletas.viewmodel.UsuarioViewModel
 
 @Composable
 fun AppNavigation(){
     val navController = rememberNavController()
-    val usuarioViewModel: `UsuarioViewModel.kt` = viewModel()
+    val usuarioViewModel: UsuarioViewModel = viewModel()
+    val platilloViewModel: PlatilloViewModel = viewModel()
+
 
     NavHost(
         navController = navController,
         startDestination = "Login"
     ) {
         composable("Login") {
-            LoginScreen(navController, usuarioViewModel)
+            RegisterScreen(navController, usuarioViewModel)
         }
         composable("Home") {
-            MainScaffold(navController, usuarioViewModel)
+            MainScaffold(
+                navController,
+                usuarioViewModel = usuarioViewModel,
+                platilloViewModel = platilloViewModel)
         }
     }
 }

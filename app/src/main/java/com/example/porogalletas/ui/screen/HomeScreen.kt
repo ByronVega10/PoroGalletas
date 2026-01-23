@@ -1,10 +1,6 @@
 package com.example.porogalletas.ui.screen
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -13,11 +9,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.porogalletas.viewmodel.UsuarioViewModel
+import com.example.porogalletas.ui.components.PlatilloCard
+import com.example.porogalletas.viewmodel.PlatilloViewModel
+
 
 @Composable
 fun HomeScreen(
     navController: NavHostController,
-    usuarioViewModel: UsuarioViewModel
+    usuarioViewModel: UsuarioViewModel,
+    platilloViewModel: PlatilloViewModel
+
     ){
         Column(
             modifier = Modifier
@@ -34,6 +35,9 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Aquí puedes agregar más contenido (productos, botones, etc)
+            platilloViewModel.platillos.forEach { platillo ->
+                PlatilloCard(platillo)
+                Spacer(modifier = Modifier.height(16.dp))
+            }
         }
     }

@@ -21,11 +21,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.porogalletas.viewmodel.UsuarioViewModel
 
 @Composable
-fun LoginScreen(
+fun RegisterScreen(
     navController: NavController,
-    viewModel: `UsuarioViewModel.kt`,
+    viewModel: UsuarioViewModel,
 ){
     val estado by viewModel.estado.collectAsState()
 
@@ -73,19 +74,6 @@ fun LoginScreen(
             isError = estado.errores.clave != null,
             supportingText = {
                 estado.errores.clave?.let {
-                    Text(text = it, color = MaterialTheme.colorScheme.error)
-                }
-            },
-            modifier = Modifier.fillMaxWidth()
-        )
-        // Campo dirección
-        OutlinedTextField(
-            value = estado.direccion,
-            onValueChange = viewModel::onDireccionChange,
-            label = { Text(text = "Dirección") },
-            isError = estado.errores.direccion != null,
-            supportingText = {
-                estado.errores.direccion?.let {
                     Text(text = it, color = MaterialTheme.colorScheme.error)
                 }
             },
