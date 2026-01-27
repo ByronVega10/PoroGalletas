@@ -1,6 +1,8 @@
 package com.example.porogalletas.ui.screen
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material3.*
@@ -11,13 +13,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.porogalletas.viewmodel.UsuarioViewModel
-import com.example.porogalletas.ui.components.PlatilloCard
 import com.example.porogalletas.viewmodel.PlatilloViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
-
+import com.example.porogalletas.ui.components.PlatilloCardCompact
 
 
 @Composable
@@ -41,7 +42,7 @@ fun HomeScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
+                    .padding(16.dp, vertical = 12.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -61,21 +62,14 @@ fun HomeScreen(
             Divider()
 
             // Contenido
-            Column(
+            LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp)
+                    .padding(horizontal = 12.dp),
+                verticalArrangement = Arrangement.spacedBy(15.dp)
             ) {
-                Text(
-                    text = "Bienvenido a PoroGalletas",
-                    style = MaterialTheme.typography.headlineMedium
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                platilloViewModel.platillos.forEach { platillo ->
-                    PlatilloCard(platillo)
-                    Spacer(modifier = Modifier.height(16.dp))
+                items(platilloViewModel.platillos) { platillo ->
+                    PlatilloCardCompact(platillo)
                 }
             }
         }
