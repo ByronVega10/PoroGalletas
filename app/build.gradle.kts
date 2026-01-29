@@ -83,4 +83,11 @@ dependencies {
     // 🗄️ EXTENSION DE ICONOS
     implementation("androidx.compose.material:material-icons-extended")
 
+    // 🌐 Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+
+// 🌐 OkHttp (para headers)
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 }
