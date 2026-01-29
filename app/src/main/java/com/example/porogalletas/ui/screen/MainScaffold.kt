@@ -117,7 +117,8 @@ fun MainScaffold(
             ) {
                 composable("home") { HomeScreen(parentNavController, usuarioViewModel, platilloViewModel) }
                 composable("edit") { EditScreen() }
-                composable("add") { AddScreen() }
+                composable("add") { AddScreen(navController = navController,
+                                                      platilloViewModel = platilloViewModel) }
             }
         }
     }
