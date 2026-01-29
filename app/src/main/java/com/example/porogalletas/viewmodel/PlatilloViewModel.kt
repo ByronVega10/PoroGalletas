@@ -57,4 +57,21 @@ class PlatilloViewModel : ViewModel() {
             cargarPlatillos()
         }
     }
+
+    fun nombreEsValidoParaCrear(nombre: String): Boolean {
+        if (nombre.isBlank()) return false
+
+        return _platillos.none {
+            it.nombre.equals(nombre.trim(), ignoreCase = true)
+        }
+    }
+
+    fun nombreEsValidoParaEditar(nombre: String, idActual: Int): Boolean {
+        if (nombre.isBlank()) return false
+
+        return _platillos.none {
+            it.id != idActual &&
+                    it.nombre.equals(nombre.trim(), ignoreCase = true)
+        }
+    }
 }

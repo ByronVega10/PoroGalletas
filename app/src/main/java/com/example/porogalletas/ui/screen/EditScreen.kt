@@ -48,6 +48,7 @@ fun EditScreen(
     platilloSeleccionado?.let {
         EditPlatilloDialog(
             platillo = it,
+            platilloViewModel = platilloViewModel,
             onDismiss = { platilloSeleccionado = null },
             onGuardar = { platilloEditado ->
                 platilloViewModel.editarPlatillo(platilloEditado)
