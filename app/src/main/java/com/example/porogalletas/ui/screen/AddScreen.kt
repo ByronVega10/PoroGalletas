@@ -69,6 +69,9 @@ fun AddScreen(
                     nombre.isBlank() ->
                         error = "El nombre no puede estar vacío"
 
+                    !platilloViewModel.nombreEsValidoParaCrear(nombre) ->
+                        error = "El nombre ya está en uso, prueba con otro"
+
                     ingredientes.isBlank() ->
                         error = "Debes ingresar ingredientes"
 
@@ -77,7 +80,7 @@ fun AddScreen(
 
                     else -> {
                         platilloViewModel.agregarPlatillo(
-                            nombre = nombre,
+                            nombre = nombre.trim(),
                             ingredientesTexto = ingredientes,
                             precio = precioInt
                         )
