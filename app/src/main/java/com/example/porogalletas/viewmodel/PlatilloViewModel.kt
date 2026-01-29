@@ -1,49 +1,60 @@
 package com.example.porogalletas.viewmodel
 
-import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
-import com.example.porogalletas.R
+import androidx.lifecycle.viewModelScope
+import androidx.compose.runtime.mutableStateListOf
+import com.example.porogalletas.data.platillo.PlatilloRepository
 import com.example.porogalletas.model.Platillo
+import kotlinx.coroutines.launch
 
 class PlatilloViewModel : ViewModel() {
+
+    private val repository = PlatilloRepository()
 
     private val _platillos = mutableStateListOf<Platillo>()
     val platillos: List<Platillo> = _platillos
 
     init {
-        // Datos de ejemplo (simulan datos del sistema)
-        _platillos.addAll(
-            listOf(
-                Platillo(
-                    id = 1,
-                    nombre = "Poro Galleta Clásica",
-                    ingredientes = mutableListOf("Avena", "Miel", "Chocolate"),
-                    precio = 2500,
-                    imageResId = R.drawable.plato1
-                ),
-                Platillo(
-                    id = 2,
-                    nombre = "Poro Galleta Vegana",
-                    ingredientes = mutableListOf("Almendra", "Cacao", "Dátiles"),
-                    precio = 2800,
-                    imageResId = R.drawable.plato2
-                )
-            )
-        )
-    }
-    fun agregarPlatillo(platillo: Platillo) {
-        _platillos.add(platillo)
+        cargarPlatillos()
     }
 
+    private fun cargarPlatillos() {
+        viewModelScope.launch {
+            try {
+                _platillos.clear()
+                _platillos.addAll(repository.obtenerPlatillos())
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun agregarPlatillo(
+        nombre: String,
+        ingredientesTexto: String,
+        precio: Int
+    ) {
+        val ingredientes = ingredientesTexto
+            .split(",")
+            .map { it.trim() }
+
+        viewModelScope.launch {
+            repository.agregarPlatillo(nombre, ingredientes, precio)
+            cargarPlatillos()
+        }
+    }
 
     fun eliminarPlatillo(id: Int) {
-        _platillos.removeIf { it.id == id }
+        viewModelScope.launch {
+            repository.eliminarPlatillo(id.toLong())
+            cargarPlatillos()
+        }
     }
 
-    fun editarPlatillo(platilloEditado: Platillo) {
-        val index = _platillos.indexOfFirst { it.id == platilloEditado.id }
-        if (index != -1) {
-            _platillos[index] = platilloEditado
+    fun editarPlatillo(platillo: Platillo) {
+        viewModelScope.launch {
+            repository.editarPlatillo(platillo)
+            cargarPlatillos()
         }
     }
 }
