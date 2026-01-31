@@ -19,12 +19,10 @@ import com.example.porogalletas.viewmodel.UsuarioViewModelFactory
 import androidx.compose.runtime.getValue
 import com.example.porogalletas.viewmodel.PlatilloViewModel
 
-
 @Composable
-fun AppNavigation(){
+fun AppNavigation(onDarkThemeChanged: (Boolean) -> Unit) {  // ← CAMBIO: recibe callback
     val navController = rememberNavController()
     val context = LocalContext.current
-
     val database = remember { AppDatabase.getDatabase(context) }
     val usuarioRepository = remember { UsuarioRepository(database.usuarioDao()) }
     val sessionManager = remember { SessionManager(context) }
@@ -32,9 +30,7 @@ fun AppNavigation(){
     val usuarioViewModel: UsuarioViewModel = viewModel(
         factory = UsuarioViewModelFactory(usuarioRepository, sessionManager)
     )
-
     val platilloViewModel: PlatilloViewModel = viewModel()
-
 
     val isLoggedIn by sessionManager.isLoggedIn.collectAsState(initial = false)
 
@@ -46,7 +42,6 @@ fun AppNavigation(){
         }
     }
 
-
     NavHost(
         navController = navController,
         startDestination = "Login"
@@ -54,8 +49,14 @@ fun AppNavigation(){
         composable("Login") {
             RegisterScreen(navController, usuarioViewModel)
         }
+
         composable("Home") {
-            MainScaffold(navController, usuarioViewModel = usuarioViewModel, platilloViewModel = platilloViewModel)
+            MainScaffold(
+                navController,
+                usuarioViewModel = usuarioViewModel,
+                platilloViewModel = platilloViewModel,
+                onDarkThemeChanged = onDarkThemeChanged  // ← CAMBIO: pasa callback
+            )
         }
     }
 }

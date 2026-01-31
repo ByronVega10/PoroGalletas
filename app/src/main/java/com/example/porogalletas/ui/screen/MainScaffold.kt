@@ -25,7 +25,8 @@ import com.example.porogalletas.viewmodel.UsuarioViewModel
 fun MainScaffold(
     parentNavController: NavHostController,
     usuarioViewModel: UsuarioViewModel,
-    platilloViewModel: PlatilloViewModel
+    platilloViewModel: PlatilloViewModel,
+    onDarkThemeChanged: (Boolean) -> Unit
 ) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -115,10 +116,20 @@ fun MainScaffold(
                 navController = navController,
                 startDestination = "home"
             ) {
-                composable("home") { HomeScreen(parentNavController, usuarioViewModel, platilloViewModel) }
-                composable("edit") { EditScreen(platilloViewModel = platilloViewModel) }
-                composable("add") { AddScreen(navController = navController,
-                                                      platilloViewModel = platilloViewModel) }
+                composable("home") {
+                    HomeScreen(
+                        parentNavController,
+                        usuarioViewModel,
+                        platilloViewModel,
+                        onDarkThemeChanged // ← AGREGAS ESTA LÍNEA
+                    )
+                }
+                composable("edit") {
+                    EditScreen(platilloViewModel = platilloViewModel)
+                }
+                composable("add") {
+                    AddScreen(navController = navController, platilloViewModel = platilloViewModel)
+                }
             }
         }
     }
