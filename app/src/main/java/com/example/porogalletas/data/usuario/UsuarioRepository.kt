@@ -1,16 +1,27 @@
 package com.example.porogalletas.data.usuario
 
-class UsuarioRepository(private val usuarioDao: UsuarioDao) {
+import com.example.porogalletas.data.remote.api.UsuarioApi
+import com.example.porogalletas.data.remote.dto.UsuarioDto
 
-    suspend fun registrar(usuario: UsuarioEntity): Long {
-        return usuarioDao.insertarUsuario(usuario)
+class UsuarioRepository(
+    private val api: UsuarioApi
+) {
+
+    suspend fun login(correo: String, clave: String): UsuarioDto? {
+        val usuarios = api.login(
+            correo = "eq.$correo",
+            clave = "eq.$clave"
+        )
+
+        return usuarios.firstOrNull()
     }
 
-    suspend fun login(correo: String, clave: String): UsuarioEntity? {
-        return usuarioDao.login(correo, clave)
-    }
-
-    suspend fun obtenerUsuarios(): List<UsuarioEntity> {
-        return usuarioDao.obtenerUsuarios()
+    suspend fun registrar(nombre: String, correo: String, clave: String) {
+        val usuario = UsuarioDto(
+            nombre = nombre,
+            correo = correo,
+            clave = clave
+        )
+        api.registrarUsuario(usuario)
     }
 }

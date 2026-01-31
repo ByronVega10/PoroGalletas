@@ -9,7 +9,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.porogalletas.data.database.AppDatabase
 import com.example.porogalletas.data.datastore.SessionManager
 import com.example.porogalletas.data.usuario.UsuarioRepository
 import com.example.porogalletas.ui.screen.MainScaffold
@@ -20,14 +19,17 @@ import androidx.compose.runtime.getValue
 import com.example.porogalletas.viewmodel.PlatilloViewModel
 
 
+
 @Composable
 fun AppNavigation(){
     val navController = rememberNavController()
     val context = LocalContext.current
 
-    val database = remember { AppDatabase.getDatabase(context) }
-    val usuarioRepository = remember { UsuarioRepository(database.usuarioDao()) }
     val sessionManager = remember { SessionManager(context) }
+
+    val usuarioApi = remember { UsuarioApiProvider.api }
+    val usuarioRepository = remember { UsuarioRepository(usuarioApi) }
+
 
     val usuarioViewModel: UsuarioViewModel = viewModel(
         factory = UsuarioViewModelFactory(usuarioRepository, sessionManager)
