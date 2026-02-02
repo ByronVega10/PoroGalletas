@@ -18,14 +18,18 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.porogalletas.ui.screen.HomeScreen  // Ajusta path si necesario
 import com.example.porogalletas.viewmodel.PlatilloViewModel
 import com.example.porogalletas.viewmodel.UsuarioViewModel
-
+import com.example.porogalletas.ui.screen.EditScreen
+import com.example.porogalletas.ui.screen.AddScreen
 @Composable
 fun MainScaffold(
     parentNavController: NavHostController,
     usuarioViewModel: UsuarioViewModel,
-    platilloViewModel: PlatilloViewModel
+    platilloViewModel: PlatilloViewModel,
+    isDarkTheme: Boolean,  // ← NUEVO
+    onThemeToggle: () -> Unit  // ← NUEVO
 ) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -68,22 +72,15 @@ fun MainScaffold(
                             Icon(
                                 imageVector = Icons.Default.Home,
                                 contentDescription = "Home",
-                                tint = if (currentRoute == "home")
-                                    MaterialTheme.colorScheme.primary
-                                else Color.Gray
+                                tint = if (currentRoute == "home") MaterialTheme.colorScheme.primary else Color.Gray
                             )
                             Text(
                                 text = "Home",
                                 fontSize = 12.sp,
-                                color = if (currentRoute == "homeScreen")
-                                    MaterialTheme.colorScheme.primary
-                                else Color.Gray
+                                color = if (currentRoute == "home") MaterialTheme.colorScheme.primary else Color.Gray
                             )
                         }
                     }
-
-                    Spacer(modifier = Modifier.weight(1f))
-
                     // EDIT
                     IconButton(
                         onClick = { navController.navigate("edit") },
@@ -93,16 +90,12 @@ fun MainScaffold(
                             Icon(
                                 imageVector = Icons.Default.Edit,
                                 contentDescription = "Editar",
-                                tint = if (currentRoute == "edit")
-                                    MaterialTheme.colorScheme.primary
-                                else Color.Gray
+                                tint = if (currentRoute == "edit") MaterialTheme.colorScheme.primary else Color.Gray
                             )
                             Text(
                                 text = "Editar",
                                 fontSize = 12.sp,
-                                color = if (currentRoute == "Edit")
-                                    MaterialTheme.colorScheme.primary
-                                else Color.Gray
+                                color = if (currentRoute == "edit") MaterialTheme.colorScheme.primary else Color.Gray
                             )
                         }
                     }
@@ -115,10 +108,21 @@ fun MainScaffold(
                 navController = navController,
                 startDestination = "home"
             ) {
-                composable("home") { HomeScreen(parentNavController, usuarioViewModel, platilloViewModel) }
-                composable("edit") { EditScreen(platilloViewModel = platilloViewModel) }
-                composable("add") { AddScreen(navController = navController,
-                                                      platilloViewModel = platilloViewModel) }
+                composable("home") {
+                    HomeScreen(
+                        navController = parentNavController,  // Usa parentNavController
+                        usuarioViewModel = usuarioViewModel,
+                        platilloViewModel = platilloViewModel,
+                        isDarkTheme = isDarkTheme,  // ← PROPAGA
+                        onThemeToggle = onThemeToggle  // ← PROPAGA
+                    )
+                }
+                composable("edit") {
+                    EditScreen(platilloViewModel = platilloViewModel)
+                }
+                composable("add") {
+                    AddScreen(navController = navController, platilloViewModel = platilloViewModel)
+                }
             }
         }
     }
