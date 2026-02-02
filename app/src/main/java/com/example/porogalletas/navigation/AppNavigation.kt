@@ -10,36 +10,28 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.porogalletas.data.datastore.SessionManager
-import com.example.porogalletas.data.usuario.UsuarioRepository
+import com.example.porogalletas.data.usuario.UsuarioRepository  // Asumiendo el path correcto
 import com.example.porogalletas.ui.screen.MainScaffold
-import com.example.porogalletas.ui.screen.RegisterScreen
+import com.example.porogalletas.ui.screen.RegisterScreen  // Asumiendo Login es RegisterScreen
 import com.example.porogalletas.viewmodel.UsuarioViewModel
 import com.example.porogalletas.viewmodel.UsuarioViewModelFactory
+import com.example.porogalletas.viewmodel.PlatilloViewModel
 import androidx.compose.runtime.getValue
 
-
-import com.example.porogalletas.viewmodel.PlatilloViewModel
-
-
-
 @Composable
-fun AppNavigation(){
+fun AppNavigation(
+    isDarkTheme: Boolean,
+    onThemeToggle: () -> Unit
+) {
     val navController = rememberNavController()
     val context = LocalContext.current
-
     val sessionManager = remember { SessionManager(context) }
-
-    val usuarioApi = remember { UsuarioApiProvider.api }
+    val usuarioApi = remember { UsuarioApiProvider.api }  // Corrige si el path es diferente
     val usuarioRepository = remember { UsuarioRepository(usuarioApi) }
-
-
     val usuarioViewModel: UsuarioViewModel = viewModel(
         factory = UsuarioViewModelFactory(usuarioRepository, sessionManager)
     )
-
     val platilloViewModel: PlatilloViewModel = viewModel()
-
-
     val isLoggedIn by sessionManager.isLoggedIn.collectAsState(initial = false)
 
     LaunchedEffect(isLoggedIn) {
@@ -50,7 +42,6 @@ fun AppNavigation(){
         }
     }
 
-
     NavHost(
         navController = navController,
         startDestination = "Login"
@@ -59,7 +50,13 @@ fun AppNavigation(){
             RegisterScreen(navController, usuarioViewModel)
         }
         composable("Home") {
-            MainScaffold(navController, usuarioViewModel = usuarioViewModel, platilloViewModel = platilloViewModel)
+            MainScaffold(
+                parentNavController = navController,
+                usuarioViewModel = usuarioViewModel,
+                platilloViewModel = platilloViewModel,
+                isDarkTheme = isDarkTheme,
+                onThemeToggle = onThemeToggle  // Propaga aquí
+            )
         }
     }
 }
